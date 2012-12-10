@@ -1,4 +1,4 @@
 wnmmp
 =====
 
-window nginx mysql memcached php 开发环境
+development environment for window nginx mysql memcached php 
