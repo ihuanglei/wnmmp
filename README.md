@@ -17,7 +17,7 @@ development environment for window nginx mysql memcached php
 * memcache 11211
 
 ## download server.zip
-php nginx mysql memcached
+php nginx mysql memcached   
 server.zip http://ihuanglei.org
 
 ## other version
