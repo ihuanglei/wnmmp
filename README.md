@@ -1,7 +1,6 @@
 wnmmp
 =====
-
-development environment for window nginx mysql memcached php
+window nginx mysql memcached php
 
 
 ## software version 
@@ -12,8 +11,8 @@ development environment for window nginx mysql memcached php
 * mysql: 5.5.25-win32 
 
 ## server port
-nginx    80
-php-cgi  9000+
-memcache 11211
+* nginx    80
+* php-cgi  9000+
+* memcache 11211
 
-
+ps: 
