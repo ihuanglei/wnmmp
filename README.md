@@ -15,4 +15,16 @@ window nginx mysql memcached php
 * php-cgi  9000+
 * memcache 11211
 
-ps: 
+## download 
+php nginx mysql memcached   
+
+## other version
+
+* nginx http://nginx.org/en/download.html
+* php http://www.php.net/downloads.php
+* mysql http://www.mysql.com/downloads/mysql/
+* memcached http://splinedancer.com/memcached-win32/
+
+save to wnmmp and install.
+
+

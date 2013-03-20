@@ -1,6 +1,6 @@
 @ECHO OFF 
 CLS 
-color 0a
+
 setlocal enabledelayedexpansion
 
 echo.
@@ -14,7 +14,6 @@ echo. ===================================
 echo.
 
 cd /d %~dp0
-
 
 
 set BASE=%CD%
@@ -31,13 +30,20 @@ set LOG=%BASE%\logs
 set TEMP=%BASE%\temp
 
 set PATH=%PATH%;%BASE%\bin
-
-
-echo. unzip
-7z.exe x -f server.zip
+  
+echo.
+if exist server.zip (
+    echo * unzip server
+    7z.exe x -f server.zip
+) else (
+    echo * server.zip not found!!
+    echo.
+    set /p yn=to continue?[Y/N]
+    if /i "!yn!" == "n" goto END
+)
 
 echo.
-echo. create directory
+echo * create directory
 if not exist scripts md scripts
 if not exist log md log
 if not exist temp md temp
@@ -46,7 +52,7 @@ if not exist temp md temp
 echo.
 set /p c=php-cgi:(default:20)?[20]
 echo.
-echo.php-cgi
+echo * php-cgi
 echo SET objShell = CreateObject("Wscript.Shell") > %SCRIPTS%\phpcgi.vbs
 if "%c%" == "" set /a c=20
 set /a m=9000 + %c%
@@ -58,49 +64,49 @@ set /a j+=1
 if %j% LEQ %m% goto LOOP2
 
 echo.
-echo. start.bat
+echo * start.bat
 sed "s#@nginx_path@#%NGINX:\=\\%#g;s#@scripts_path@#%SCRIPTS:\=\\%#g" %SCRIPTS_CONF%\start.conf >%SCRIPTS%\start.bat
 
 echo.
-echo. php.ini
+echo * php.ini
 sed "s#@log_path@#%LOG:\=/%#g;s#@php_path@#%PHP:\=/%#g" %PHP_CONF%\php.conf >%PHP%\php.ini
 
 echo.
-echo. nginx.conf
+echo * nginx.conf
 sed "s#@log_path@#%LOG:\=/%#g;s#@back_server@#%back_server%#g" %NGINX_CONF%\nginx.conf >%NGINX%\conf\nginx.conf
 
 :MEMCACHED
 echo.
-set /p yn=install memcached?[y/N]
-if "%yn%" == "N" goto MYSQL
+set /p yn=install memcached?[Y/N]
+if /i "%yn%" == "n" goto MYSQL
 %MEMCACHED%\memcached.exe -d install
 
 :MYSQL
 echo.
-set /p yn=install mysql?[y/N]
-if "%yn%" == "N" goto AUTO
+set /p yn=install mysql?[Y/N]
+if /i "%yn%" == "n" goto AUTO
 REM %MYSQL%\bin\mysqld.exe -d install
 
 :AUTO
 echo.
-set /p yn=open window start nginx & php?[y/N]
-if "%yn%" == "N" goto EP
+set /p yn=auto start?[Y/N]
+if /i "%yn%" == "n" goto EP
 REG ADD HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v snp /t REG_SZ /d "\"%SCRIPTS%\start.bat\" a" /F  
 
 
 :EP
-echo. shortcut
+echo * shortcut
 shortcut.exe /f:"%USERPROFILE%\Desktop\nps.lnk" /a:c /t:%SCRIPTS%\start.bat
 
-echo. reg
+echo * reg
 regedit %CONFIG%\http-80.reg
 
 :COMPLETE
 echo.
-echo. start desktop nps
+echo * start desktop nps
 
 :END
 echo.
-echo. install success. press any key close
+echo * install success. press any key close
 
 pause>nul
